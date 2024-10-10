@@ -1,6 +1,6 @@
 *.pdf
 # Ignoruj katalogi ustawień PyCharm
-.idea/
+../.idea/
 
 # Ignoruj pliki kompilacji, środowiska wirtualne oraz inne pliki tymczasowe
 
