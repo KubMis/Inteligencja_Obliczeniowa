@@ -1,0 +1,34 @@
+*.pdf
+# Ignoruj katalogi ustawień PyCharm
+.idea/
+
+# Ignoruj pliki kompilacji, środowiska wirtualne oraz inne pliki tymczasowe
+
+# Python Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Wirtualne środowiska
+venv/
+ENV/
+env/
+.venv/
+.ENV/
+.pyenv/
+
+# Pliki logów i tymczasowe
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.swo
+*.DS_Store
+
+# Baza danych SQLite
+*.sqlite3
+
+# Pliki system
+
