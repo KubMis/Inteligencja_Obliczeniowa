@@ -5,8 +5,9 @@ import matplotlib.pyplot  as plt
 
 iris = datasets.load_iris()
 X = pd.DataFrame(iris.data, columns=iris.feature_names)
-#y = pd.Series(iris.target, name='FlowerType')
+y = pd.Series(iris.target, name='FlowerType')
 print(X.head())
+print(y.head())
 
 
 pca_iris_2 = PCA(n_components=2).fit(iris.data)
