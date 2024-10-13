@@ -37,12 +37,3 @@ def correct_iris_names():
 correct_na_values()
 correct_numerical_values()
 correct_iris_names()
-
-try:
-    null_values = dataset.isnull().sum().sum()
-    if null_values == 0:
-        print("Nie znaleziono nullów")
-    else:
-        print(f"Znaleziono {null_values} nulli")
-except Exception as e:
-    print(f"Wystąpił błąd: {e}")
