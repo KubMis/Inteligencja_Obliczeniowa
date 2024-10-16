@@ -5,8 +5,6 @@ numerical_column_names = ["sepal.length","sepal.width","petal.length","petal.wid
 iris_variety = ["Setosa","Versicolor", "Virginica"]
 dataset = pd.read_csv("iris_with_errors.csv", na_values=missing_values)
 
-print(dataset.isnull().sum())
-
 def correct_na_values():
     for names in numerical_column_names:
         na_count = dataset[names].isna().sum()
@@ -32,8 +30,11 @@ def correct_iris_names():
     for names in dataset['variety']:
         if names not in iris_variety:
             changed_name = get_first_3_chars(names)
-            print(f" changing {names} to {changed_name}")
+            print(f"Changing {names} to {changed_name}")
 
-correct_na_values()
-correct_numerical_values()
-correct_iris_names()
+if __name__ == "__main__":
+    print("All missing values:")
+    print(dataset.isnull().sum())
+    correct_na_values()
+    correct_numerical_values()
+    correct_iris_names()

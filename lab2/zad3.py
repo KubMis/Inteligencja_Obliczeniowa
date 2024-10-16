@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 
 iris = datasets.load_iris()
 FLOWER_TYPE = pd.Series(iris.target, name='FlowerType')
+
 def create_plot_all_plots():
     sepal_length_data = pd.DataFrame(iris.data[:, 0], columns=['sepal length (cm)'])
     sepal_width_data = pd.DataFrame(iris.data[:, 1], columns=['sepal width (cm)'])
@@ -31,4 +32,5 @@ def create_single_plot(x,y,title):
     plt.legend()
     plt.show()
 
-create_plot_all_plots()
+if __name__ == "__main__":
+    create_plot_all_plots()
