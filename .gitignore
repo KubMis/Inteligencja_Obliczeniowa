@@ -16,6 +16,7 @@ env/
 .venv/
 .ENV/
 .pyenv/
+.idea/
 
 # Pliki logów i tymczasowe
 *.log
