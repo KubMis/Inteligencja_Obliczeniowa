@@ -9,7 +9,7 @@ random_state=300666)
 def classify_iris( pl, pw):
     if pw < 1:
         return "Setosa"
-    elif pl >= 5.2 :
+    elif pl >= 4.9:
         return "Virginica"
     else:
         return "Versicolor"
@@ -21,8 +21,5 @@ for i in range(length):
     if classify_iris(test_set[i, 2],test_set[i, 3]) == test_set[i,4] :
         good_predictions = good_predictions + 1
 
-print(test_set)
-
 print(good_predictions)
 print(good_predictions / length * 100, "%")
-
