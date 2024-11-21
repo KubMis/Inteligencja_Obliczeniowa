@@ -18,6 +18,10 @@ env/
 .pyenv/
 .idea/
 
+.png
+.jpg
+.jpeg
+
 # Pliki logów i tymczasowe
 *.log
 *.pot
