@@ -164,7 +164,7 @@ def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=100, n_batc
 			# summarize loss on this batch
 			print('>%d, %d/%d, d=%.3f, g=%.3f' % (i+1, j+1, bat_per_epo, d_loss, g_loss))
 		# evaluate the model performance, sometimes
-	summarize_performance(30, g_model, d_model, dataset, latent_dim)
+	summarize_performance(100, g_model, d_model, dataset, latent_dim)
 
 # size of the latent space
 latent_dim = 100
@@ -177,9 +177,9 @@ gan_model = define_gan(g_model, d_model)
 # load image data
 dataset = load_real_samples()
 #number of epochs
-n_epochs = 11
+n_epochs = 100
 #batch size
 batch_size = 256
-new_model = load_my_model('generator_model_051.h5')
+new_model = load_my_model('lab6\generator_model_053.h5')
 # train model
 train(new_model, d_model, gan_model, dataset, latent_dim, n_epochs, batch_size)
