@@ -49,6 +49,7 @@ numerical_data,
 
     cnf_matrix= confusion_matrix(test_results, classifier_predictions)
     print(f"neuron 6,3 score is {score}")
+
     print(cnf_matrix)
     print(f"neuron net 8,4 score is {score2}")
     print(f"decision tree score is {score3}")
