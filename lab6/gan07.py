@@ -1,5 +1,4 @@
 # example of training a gan on mnist
-import numpy as np
 from keras.src.saving import load_model
 from numpy import expand_dims
 from numpy import zeros
@@ -7,12 +6,17 @@ from numpy import ones
 from numpy import vstack
 from numpy.random import randn
 from numpy.random import randint
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Reshape, Flatten, Conv2D, Conv2DTranspose, LeakyReLU, Dropout
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.datasets import mnist
+from keras.datasets.mnist import load_data
+from keras.optimizers import Adam
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import Reshape
+from keras.layers import Flatten
+from keras.layers import Conv2D
+from keras.layers import Conv2DTranspose
+from keras.layers import LeakyReLU
+from keras.layers import Dropout
 from matplotlib import pyplot
-
 
 # define the standalone discriminator model
 def define_discriminator(in_shape=(28,28,1)):
@@ -62,14 +66,10 @@ def define_gan(g_model, d_model):
 	model.compile(loss='binary_crossentropy', optimizer=opt)
 	return model
 
-def load_my_model(path_to_model):
-	loaded_model =  load_model(path_to_model)
-	return  loaded_model
-
 # load and prepare mnist training images
 def load_real_samples():
 	# load mnist dataset
-	(trainX, _), (testX, _) = mnist.load_data()
+	(trainX, _), (testX, _) = load_data()
 	# expand to 3d, e.g. add channels dimension
 	X = expand_dims(testX, axis=-1)
 	# convert from unsigned ints to floats
@@ -121,23 +121,27 @@ def save_plot(examples, epoch, n=10):
 	pyplot.savefig(filename)
 	pyplot.close()
 
+
+def save_models(generator, discriminator, epoch):
+	generator.save(f'generator_{epoch}.h5')
+	discriminator.save(f'discriminator_{epoch}.h5')
+	print(f'Models saved after epoch {epoch}')
+
+def load_models(generator_path, discriminator_path):
+	g_model = load_model(generator_path)
+	d_model = load_model(discriminator_path)
+	gan_model = define_gan(g_model, d_model)
+	return g_model, d_model, gan_model
+
 # evaluate the discriminator, plot generated images, save generator model
 def summarize_performance(epoch, g_model, d_model, dataset, latent_dim, n_samples=100):
-	# prepare real samples
-	X_real, y_real = generate_real_samples(dataset, n_samples)
-	# evaluate discriminator on real examples
-	_, acc_real = d_model.evaluate(X_real, y_real, verbose=0)
-	# prepare fake examples
-	x_fake, y_fake = generate_fake_samples(g_model, latent_dim, n_samples)
-	# evaluate discriminator on fake examples
-	_, acc_fake = d_model.evaluate(x_fake, y_fake, verbose=0)
-	# summarize discriminator performance
-	print('>Accuracy real: %.0f%%, fake: %.0f%%' % (acc_real*100, acc_fake*100))
-	# save plot
-	save_plot(x_fake, epoch)
-	# save the generator model tile file
-	filename = 'generator_model_%03d.h5' % (epoch + 1)
-	g_model.save(filename)
+    X_real, y_real = generate_real_samples(dataset, n_samples)
+    _, acc_real = d_model.evaluate(X_real, y_real, verbose=0)
+    x_fake, y_fake = generate_fake_samples(g_model, latent_dim, n_samples)
+    _, acc_fake = d_model.evaluate(x_fake, y_fake, verbose=0)
+    print('>Accuracy real: %.0f%%, fake: %.0f%%' % (acc_real*100, acc_fake*100))
+    save_plot(x_fake, epoch)
+    save_models(g_model, d_model, epoch)
 
 # train the generator and discriminator
 def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=100, n_batch=256):
@@ -164,22 +168,22 @@ def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=100, n_batc
 			# summarize loss on this batch
 			print('>%d, %d/%d, d=%.3f, g=%.3f' % (i+1, j+1, bat_per_epo, d_loss, g_loss))
 		# evaluate the model performance, sometimes
-	summarize_performance(100, g_model, d_model, dataset, latent_dim)
+		summarize_performance(i, g_model, d_model, dataset, latent_dim)
 
 # size of the latent space
 latent_dim = 100
 # create the discriminator
-d_model = define_discriminator()
+#d_model = define_discriminator()
 # create the generator
-g_model = define_generator(latent_dim)
+#g_model = define_generator(latent_dim)
 # create the gan
-gan_model = define_gan(g_model, d_model)
+#gan_model = define_gan(g_model, d_model)
+g_model,d_model,gan_model = load_models('generator_10.h5','discriminator_10.h5')
 # load image data
 dataset = load_real_samples()
 #number of epochs
-n_epochs = 100
+n_epochs = 10
 #batch size
 batch_size = 256
-new_model = load_my_model('lab6\generator_model_053.h5')
 # train model
-train(new_model, d_model, gan_model, dataset, latent_dim, n_epochs, batch_size)
+train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs, batch_size)
