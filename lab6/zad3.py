@@ -1,6 +1,5 @@
 import os
 import cv2
-import numpy as np
 from matplotlib import pyplot as plt
 
 path_to_image = "bird_miniatures_unzipped"

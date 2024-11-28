@@ -3,7 +3,7 @@ from ultralytics import YOLO
 model = YOLO('yolov8n.pt')
 input_path = 'images'
 
-results = model.predict(source=input_path)
+results = model.predict(source=input_path,save=True,project='output')
 
 for result in results:
     for box in result.boxes.data:
