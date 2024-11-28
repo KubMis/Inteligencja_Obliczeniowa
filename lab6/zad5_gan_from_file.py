@@ -178,11 +178,11 @@ latent_dim = 100
 #g_model = define_generator(latent_dim)
 # create the gan
 #gan_model = define_gan(g_model, d_model)
-g_model,d_model,gan_model = load_models('generator_10.h5','discriminator_10.h5')
+g_model,d_model,gan_model = load_models('generator_7.h5','discriminator_7.h5')
 # load image data
 dataset = load_real_samples()
 #number of epochs
-n_epochs = 12
+n_epochs = 8
 #batch size
 batch_size = 256
 # train model
