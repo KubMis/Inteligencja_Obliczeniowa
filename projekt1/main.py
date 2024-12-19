@@ -1,12 +1,12 @@
 import datetime
 import os
 import numpy as np
-from dateutil.utils import today
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
 from matplotlib import pyplot as plt
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
-from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.layers import BatchNormalization, Dropout
 
@@ -18,8 +18,6 @@ today_date= datetime.date.today()
 train_folder = 'food11/train'
 test_folder = 'food11/test'
 categories = os.listdir(train_folder)
-print(categories)
-print(today_date)
 
 model = Sequential()
 model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNELS)))
@@ -76,8 +74,8 @@ test_generator = test_datagen.flow_from_directory(
     batch_size=32
 )
 
-early_stop = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
-reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=3, min_lr=1e-5)
+early_stop = EarlyStopping(patience=10, restore_best_weights=True)
+reduce_lr = ReduceLROnPlateau(monitor='accuracy', factor=0.2, patience=5, min_lr=1e-5)
 
 epochs=30
 
@@ -101,6 +99,18 @@ ax2.set_xticks(np.arange(1, epochs, 1))
 
 legend = plt.legend(loc='best', shadow=True)
 plt.tight_layout()
-plt.show()
 
-model.save(f"model_{epochs}_{today_date}.keras")
+
+Y_pred = model.predict(test_generator)
+y_pred = np.argmax(Y_pred, axis=1)
+y_true = test_generator.classes
+
+cm = confusion_matrix(y_true, y_pred)
+
+plt.figure(figsize=(11, 11))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=categories, yticklabels=categories)
+plt.xlabel('Predicted classes')
+plt.ylabel('True classes')
+plt.title('Confusion matrix')
+
+plt.show()
